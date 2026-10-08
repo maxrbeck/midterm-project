@@ -1,2 +1,8 @@
 RM1.md
 RM2.md
+
+node_modules/
+
+league.db
+league.db-*
+.env

@@ -9,23 +9,41 @@ import {
 } from "./scoring.js";
 
 // ---------------------------------------------------------------
-// State: everything the app knows lives in these variables.
-// The page is always re-drawn from them (see renderAll()).
+// State: a copy of what's in the database, plus what the page is doing.
+// The page is always re-drawn from these variables (see renderAll()).
 // ---------------------------------------------------------------
 let rules = null;
 let teams = [];
 let matches = [];
 let seasonView = "teams"; // "teams" or "players"
-let selectedTeam = null; // team name shown in the detail panel
+let selectedTeamId = null; // team shown in the detail panel
+let staffEmail = null; // null means the public view
+let editingMatchId = null; // result being edited, or null when adding
+let editingTeamId = null; // team being edited, or null when adding
+
+const pageIds = ["match-night", "season", "rosters", "rules"];
 
 // ---------------------------------------------------------------
 // Element references
 // ---------------------------------------------------------------
 const appMessage = document.querySelector("#app-message");
 const seasonName = document.querySelector("#season-name");
-const tabButtons = document.querySelectorAll(".tab");
+const tabLinks = document.querySelectorAll(".tab");
 const pages = document.querySelectorAll(".page");
 const themeToggle = document.querySelector("#theme-toggle");
+
+// Staff sign in
+const signInButton = document.querySelector("#sign-in-button");
+const signOutButton = document.querySelector("#sign-out-button");
+const staffBadge = document.querySelector("#staff-badge");
+const staffEmailText = document.querySelector("#staff-email");
+const loginDialog = document.querySelector("#login-dialog");
+const loginForm = document.querySelector("#login-form");
+const loginEmail = document.querySelector("#login-email");
+const loginPassword = document.querySelector("#login-password");
+const loginStatus = document.querySelector("#login-status");
+const loginSubmit = document.querySelector("#login-submit");
+const loginCancel = document.querySelector("#login-cancel");
 
 // Match night
 const weekSelect = document.querySelector("#week-select");
@@ -34,6 +52,9 @@ const teamSelect = document.querySelector("#team-select");
 const placementInput = document.querySelector("#placement-input");
 const playerInputs = document.querySelector("#player-inputs");
 const resultForm = document.querySelector("#result-form");
+const resultFormTitle = document.querySelector("#result-form-title");
+const resultSubmit = document.querySelector("#result-submit");
+const resultCancel = document.querySelector("#result-cancel");
 const formStatus = document.querySelector("#form-status");
 const resultsTitle = document.querySelector("#results-title");
 const resultsMessage = document.querySelector("#results-message");
@@ -53,11 +74,15 @@ const teamDetail = document.querySelector("#team-detail");
 
 // Rosters
 const teamForm = document.querySelector("#team-form");
+const teamFormTitle = document.querySelector("#team-form-title");
+const teamFormHint = document.querySelector("#team-form-hint");
 const teamNameInput = document.querySelector("#team-name-input");
 const schoolInput = document.querySelector("#school-input");
 const player1Input = document.querySelector("#player1-input");
 const player2Input = document.querySelector("#player2-input");
 const teamFormStatus = document.querySelector("#team-form-status");
+const teamSubmit = document.querySelector("#team-submit");
+const teamCancel = document.querySelector("#team-cancel");
 const rosterTitle = document.querySelector("#roster-title");
 const rosterMessage = document.querySelector("#roster-message");
 const rosterList = document.querySelector("#roster-list");
@@ -68,33 +93,68 @@ const ruleGames = document.querySelector("#rule-games");
 const ruleElim = document.querySelector("#rule-elim");
 const pointsGrid = document.querySelector("#points-grid");
 const pointsNote = document.querySelector("#points-note");
+const rulesForm = document.querySelector("#rules-form");
+const rulesSeasonInput = document.querySelector("#rules-season-input");
+const rulesWeeksInput = document.querySelector("#rules-weeks-input");
+const rulesGamesInput = document.querySelector("#rules-games-input");
+const rulesElimInput = document.querySelector("#rules-elim-input");
+const pointsInputs = document.querySelector("#points-inputs");
+const addPlaceButton = document.querySelector("#add-place");
+const removePlaceButton = document.querySelector("#remove-place");
+const rulesStatus = document.querySelector("#rules-status");
+const rulesDiscard = document.querySelector("#rules-discard");
 
 // ---------------------------------------------------------------
-// Loading and saving data
+// Talking to the server (server.js)
 // ---------------------------------------------------------------
 
-// fetch() a JSON file and return the parsed data (Lecture 12).
-async function loadJson(url) {
-  const response = await fetch(url);
+// Sends a request and returns the JSON the server answers with.
+// If the server says no, this throws an Error with the server's message,
+// so callers can show it with try / catch (Lecture 12).
+async function api(method, url, body) {
+  const options = { method: method, headers: {} };
+
+  const token = localStorage.getItem("staffToken");
+  if (token !== null) {
+    options.headers["Authorization"] = "Bearer " + token;
+  }
+
+  if (body !== undefined) {
+    options.headers["Content-Type"] = "application/json";
+    options.body = JSON.stringify(body);
+  }
+
+  const response = await fetch(url, options);
+
+  let data = {};
+  try {
+    data = await response.json();
+  } catch (error) {
+    // Not JSON (for example an HTML error page). Keep data as {}.
+  }
+
+  // 401 while signed in means the session ran out.
+  if (response.status === 401 && staffEmail !== null) {
+    signedOut("You were signed out. Sign in again to keep editing.");
+  }
+
   if (!response.ok) {
-    throw new Error("Request failed: " + response.status);
+    throw new Error(data.error || "Request failed: " + response.status);
   }
-  return await response.json();
+  return data;
 }
 
-// localStorage only stores text, so arrays get turned into JSON text first.
-function saveData() {
-  localStorage.setItem("teams", JSON.stringify(teams));
-  localStorage.setItem("matches", JSON.stringify(matches));
+async function loadLeague() {
+  const data = await api("GET", "/api/league");
+  rules = data.rules;
+  teams = data.teams;
+  matches = data.matches;
 }
 
-// Returns the saved array, or null if nothing has been saved yet.
-function loadSaved(key) {
-  const text = localStorage.getItem(key);
-  if (text === null) {
-    return null;
-  }
-  return JSON.parse(text);
+// Re-download everything after a change, then re-draw.
+async function refresh() {
+  await loadLeague();
+  renderAll();
 }
 
 // ---------------------------------------------------------------
@@ -183,7 +243,22 @@ function makeTable(headings, rows) {
   return wrap;
 }
 
+// isDanger makes it turn red on hover (for Delete buttons).
+function makeSmallButton(text, onClick, isDanger) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.classList.add("icon-button");
+  if (isDanger) {
+    button.classList.add("danger-hover");
+  }
+  button.textContent = text;
+  button.addEventListener("click", onClick);
+  return button;
+}
+
+// Fills a <select> with "Week 1", "Week 2", ... and keeps the current choice if it still fits.
 function fillNumberSelect(select, count, label) {
+  const current = Number(select.value);
   select.innerHTML = "";
   for (let i = 1; i <= count; i++) {
     const option = document.createElement("option");
@@ -191,12 +266,29 @@ function fillNumberSelect(select, count, label) {
     option.textContent = label + " " + i;
     select.appendChild(option);
   }
+  if (current >= 1 && current <= count) {
+    select.value = current;
+  }
 }
 
-function findTeam(teamName) {
+function findTeam(teamId) {
   return teams.find(function (team) {
-    return team.name === teamName;
+    return team.id === teamId;
   });
+}
+
+function findMatch(matchId) {
+  return matches.find(function (match) {
+    return match.id === matchId;
+  });
+}
+
+function teamName(teamId) {
+  const team = findTeam(teamId);
+  if (team === undefined) {
+    return "Unknown team";
+  }
+  return team.name;
 }
 
 // Shows "–" instead of 0.0 for teams/players with no games.
@@ -207,33 +299,46 @@ function formatAverage(value, games) {
   return value.toFixed(1);
 }
 
+function isStaff() {
+  return staffEmail !== null;
+}
+
 // ---------------------------------------------------------------
-// Tabs and theme
+// Tabs: the page shown matches the #hash in the address bar,
+// so refresh, the back button and shared links all work.
+// (Sections are id="page-season" etc., not id="season", so the
+// browser doesn't also jump-scroll down to them.)
 // ---------------------------------------------------------------
-function showPage(pageId) {
+function showPageFromHash() {
+  let pageId = location.hash.slice(1);
+  if (!pageIds.includes(pageId)) {
+    pageId = "match-night";
+  }
+
   pages.forEach(function (page) {
-    if (page.id === pageId) {
+    if (page.id === "page-" + pageId) {
       page.classList.remove("hide");
     } else {
       page.classList.add("hide");
     }
   });
 
-  tabButtons.forEach(function (button) {
-    if (button.getAttribute("data-page") === pageId) {
-      button.classList.add("active");
+  tabLinks.forEach(function (link) {
+    if (link.getAttribute("href") === "#" + pageId) {
+      link.classList.add("active");
     } else {
-      button.classList.remove("active");
+      link.classList.remove("active");
     }
   });
 }
 
-tabButtons.forEach(function (button) {
-  button.addEventListener("click", function (event) {
-    showPage(event.target.getAttribute("data-page"));
-  });
+window.addEventListener("hashchange", function () {
+  showPageFromHash();
 });
 
+// ---------------------------------------------------------------
+// Theme
+// ---------------------------------------------------------------
 function setTheme(theme) {
   if (theme === "dark") {
     document.body.classList.add("dark");
@@ -242,22 +347,111 @@ function setTheme(theme) {
     document.body.classList.remove("dark");
     themeToggle.textContent = "Dark mode";
   }
-  localStorage.setItem("theme", theme);
 }
 
+// Only a click on the toggle saves a choice, so everyone else gets the dark default.
 themeToggle.addEventListener("click", function () {
+  let theme = "dark";
   if (document.body.classList.contains("dark")) {
-    setTheme("light");
-  } else {
-    setTheme("dark");
+    theme = "light";
   }
+  setTheme(theme);
+  localStorage.setItem("chosenTheme", theme);
+});
+
+// ---------------------------------------------------------------
+// Staff sign in / sign out
+// ---------------------------------------------------------------
+
+// email = signed-in staff member, or null for the public view.
+// CSS hides everything with class "admin-only" unless <body> has "is-admin".
+function setStaff(email) {
+  staffEmail = email;
+
+  if (email === null) {
+    document.body.classList.remove("is-admin");
+    signInButton.classList.remove("hide");
+    staffBadge.classList.add("hide");
+  } else {
+    document.body.classList.add("is-admin");
+    signInButton.classList.add("hide");
+    staffBadge.classList.remove("hide");
+    staffEmailText.textContent = email;
+  }
+
+  stopEditingMatch();
+  stopEditingTeam();
+  if (rules !== null) {
+    fillRulesForm();
+    renderAll();
+  }
+}
+
+function signedOut(message) {
+  localStorage.removeItem("staffToken");
+  setStaff(null);
+  if (message) {
+    showMessage(appMessage, message);
+  }
+}
+
+// On page load: is the saved token still good?
+async function checkStaff() {
+  if (localStorage.getItem("staffToken") === null) {
+    return;
+  }
+  try {
+    const me = await api("GET", "/api/me");
+    setStaff(me.email);
+  } catch (error) {
+    localStorage.removeItem("staffToken");
+  }
+}
+
+signInButton.addEventListener("click", function () {
+  loginForm.reset();
+  hideMessage(loginStatus);
+  loginDialog.showModal();
+});
+
+loginCancel.addEventListener("click", function () {
+  loginDialog.close();
+});
+
+loginForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
+  loginSubmit.disabled = true;
+
+  try {
+    const session = await api("POST", "/api/login", {
+      email: loginEmail.value,
+      password: loginPassword.value
+    });
+    localStorage.setItem("staffToken", session.token);
+    loginDialog.close();
+    hideMessage(appMessage);
+    setStaff(session.email);
+  } catch (error) {
+    showStatus(loginStatus, error.message, true);
+  }
+
+  loginSubmit.disabled = false;
+});
+
+signOutButton.addEventListener("click", async function () {
+  try {
+    await api("POST", "/api/logout");
+  } catch (error) {
+    console.log(error);
+  }
+  signedOut();
 });
 
 // ---------------------------------------------------------------
 // Match night
 // ---------------------------------------------------------------
 function fillTeamSelect() {
-  const current = teamSelect.value;
+  const current = Number(teamSelect.value);
   teamSelect.innerHTML = "";
 
   const placeholder = document.createElement("option");
@@ -267,7 +461,7 @@ function fillTeamSelect() {
 
   teams.forEach(function (team) {
     const option = document.createElement("option");
-    option.value = team.name;
+    option.value = team.id;
     option.textContent = team.name;
     teamSelect.appendChild(option);
   });
@@ -282,9 +476,10 @@ function fillTeamSelect() {
 }
 
 // One row of elims/deaths inputs for each player on the chosen team.
-function renderPlayerInputs() {
+// When editing, existingMatch fills in the saved numbers.
+function renderPlayerInputs(existingMatch) {
   playerInputs.innerHTML = "";
-  const team = findTeam(teamSelect.value);
+  const team = findTeam(Number(teamSelect.value));
 
   if (team === undefined) {
     const hint = document.createElement("p");
@@ -294,21 +489,33 @@ function renderPlayerInputs() {
     return;
   }
 
-  team.players.forEach(function (playerName) {
+  team.players.forEach(function (player) {
+    let elims = 0;
+    let deaths = 0;
+    if (existingMatch && existingMatch.teamId === team.id) {
+      const line = existingMatch.players.find(function (result) {
+        return result.playerId === player.id;
+      });
+      if (line !== undefined) {
+        elims = line.elims;
+        deaths = line.deaths;
+      }
+    }
+
     const row = document.createElement("div");
     row.classList.add("player-row");
-    row.setAttribute("data-player", playerName);
+    row.setAttribute("data-player-id", player.id);
 
     const name = document.createElement("span");
     name.classList.add("player-name");
-    name.textContent = playerName;
+    name.textContent = player.name;
 
     const elimsLabel = document.createElement("label");
     elimsLabel.textContent = "Elims";
     const elimsInput = document.createElement("input");
     elimsInput.type = "number";
     elimsInput.min = 0;
-    elimsInput.value = 0;
+    elimsInput.value = elims;
     elimsInput.classList.add("elims-input");
     elimsLabel.appendChild(elimsInput);
 
@@ -317,7 +524,7 @@ function renderPlayerInputs() {
     const deathsInput = document.createElement("input");
     deathsInput.type = "number";
     deathsInput.min = 0;
-    deathsInput.value = 0;
+    deathsInput.value = deaths;
     deathsInput.classList.add("deaths-input");
     deathsLabel.appendChild(deathsInput);
 
@@ -327,109 +534,118 @@ function renderPlayerInputs() {
 }
 
 teamSelect.addEventListener("change", function () {
-  renderPlayerInputs();
+  renderPlayerInputs(findMatch(editingMatchId));
 });
 
 weekSelect.addEventListener("change", function () {
+  stopEditingMatch();
   renderMatchNight();
 });
 
-function isWholeNumber(value) {
-  return Number.isInteger(value) && value >= 0;
+function startEditingMatch(matchId) {
+  const match = findMatch(matchId);
+  if (match === undefined) {
+    return;
+  }
+
+  editingMatchId = match.id;
+  gameSelect.value = match.game;
+  teamSelect.value = match.teamId;
+  placementInput.value = match.placement;
+  renderPlayerInputs(match);
+
+  resultFormTitle.textContent = "Edit result · G" + match.game + " · " + teamName(match.teamId);
+  resultSubmit.textContent = "Update result";
+  resultCancel.classList.remove("hide");
+  resultForm.classList.add("editing");
+  hideMessage(formStatus);
+
+  renderMatchNight();
+  resultForm.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-resultForm.addEventListener("submit", function (event) {
+// Puts the form back to "add a new result".
+function stopEditingMatch() {
+  editingMatchId = null;
+  resultFormTitle.textContent = "Enter a result";
+  resultSubmit.textContent = "Save result";
+  resultCancel.classList.add("hide");
+  resultForm.classList.remove("editing");
+  teamSelect.value = "";
+  placementInput.value = "";
+  hideMessage(formStatus);
+  renderPlayerInputs();
+}
+
+resultCancel.addEventListener("click", function () {
+  stopEditingMatch();
+  renderMatchNight();
+});
+
+resultForm.addEventListener("submit", async function (event) {
   event.preventDefault();
 
-  const week = Number(weekSelect.value);
-  const game = Number(gameSelect.value);
-  const teamName = teamSelect.value;
-  const placement = Number(placementInput.value);
-
-  if (teamName === "") {
+  const teamId = Number(teamSelect.value);
+  const team = findTeam(teamId);
+  if (team === undefined) {
     showStatus(formStatus, "Choose a team first.", true);
-    return;
-  }
-
-  if (!isWholeNumber(placement) || placement < 1) {
-    showStatus(formStatus, "Placement must be 1 or higher.", true);
-    return;
-  }
-
-  // Only one result per team per game.
-  const duplicateIndex = matches.findIndex(function (match) {
-    return match.week === week && match.game === game && match.team === teamName;
-  });
-  if (duplicateIndex !== -1) {
-    showStatus(formStatus, teamName + " already has a result for week " + week + ", game " + game + ". Delete it below to re-enter it.", true);
-    return;
-  }
-
-  // Two teams can't finish in the same place in the same game.
-  const takenBy = matches.find(function (match) {
-    return match.week === week && match.game === game && match.placement === placement;
-  });
-  if (takenBy !== undefined) {
-    showStatus(formStatus, ordinal(placement) + " place in game " + game + " is already taken by " + takenBy.team + ".", true);
     return;
   }
 
   // Read each player's row.
   const players = [];
-  let badNumber = false;
   playerInputs.querySelectorAll(".player-row").forEach(function (row) {
-    const elims = Number(row.querySelector(".elims-input").value);
-    const deaths = Number(row.querySelector(".deaths-input").value);
-
-    if (!isWholeNumber(elims) || !isWholeNumber(deaths)) {
-      badNumber = true;
-    }
-
     players.push({
-      name: row.getAttribute("data-player"),
-      elims: elims,
-      deaths: deaths
+      playerId: Number(row.getAttribute("data-player-id")),
+      elims: Number(row.querySelector(".elims-input").value),
+      deaths: Number(row.querySelector(".deaths-input").value)
     });
   });
 
-  if (badNumber) {
-    showStatus(formStatus, "Elims and deaths must be whole numbers, 0 or more.", true);
-    return;
-  }
-
-  const match = {
-    id: "m" + Date.now(),
-    week: week,
-    game: game,
-    team: teamName,
-    placement: placement,
+  const result = {
+    week: Number(weekSelect.value),
+    game: Number(gameSelect.value),
+    teamId: teamId,
+    placement: Number(placementInput.value),
     players: players
   };
 
-  matches.push(match);
-  saveData();
+  // The server double-checks everything and answers with an error message if something's wrong.
+  resultSubmit.disabled = true;
+  try {
+    let verb = "Saved";
+    if (editingMatchId === null) {
+      await api("POST", "/api/matches", result);
+    } else {
+      await api("PUT", "/api/matches/" + editingMatchId, result);
+      verb = "Updated";
+    }
 
-  showStatus(formStatus, "Saved: " + teamName + " finished " + ordinal(placement) + " for " + matchPoints(match, rules) + " points.", false);
-
-  // Clear the team-specific parts but keep week and game for the next entry.
-  teamSelect.value = "";
-  placementInput.value = "";
-  renderPlayerInputs();
-  renderAll();
+    const message = verb + ": " + team.name + " finished " + ordinal(result.placement) + " for " + matchPoints(result, rules) + " points.";
+    stopEditingMatch();
+    await refresh();
+    showStatus(formStatus, message, false);
+  } catch (error) {
+    showStatus(formStatus, error.message, true);
+  }
+  resultSubmit.disabled = false;
 });
 
-function deleteMatch(matchId) {
-  const index = matches.findIndex(function (match) {
-    return match.id === matchId;
-  });
-
-  if (index === -1) {
+async function deleteMatch(matchId) {
+  const match = findMatch(matchId);
+  if (!confirm("Delete " + teamName(match.teamId) + "'s result for game " + match.game + "?")) {
     return;
   }
 
-  matches.splice(index, 1);
-  saveData();
-  renderAll();
+  try {
+    await api("DELETE", "/api/matches/" + matchId);
+    if (editingMatchId === matchId) {
+      stopEditingMatch();
+    }
+    await refresh();
+  } catch (error) {
+    showStatus(formStatus, error.message, true);
+  }
 }
 
 function renderMatchNight() {
@@ -470,7 +686,7 @@ function renderMatchNight() {
 
     for (let g = 1; g <= rules.matchesPerWeek; g++) {
       const match = weekMatches.find(function (m) {
-        return m.team === row.team && m.game === g;
+        return m.teamId === row.teamId && m.game === g;
       });
       if (match === undefined) {
         tr.appendChild(makeCell("–", "num"));
@@ -495,6 +711,9 @@ function renderMatchNight() {
 
   sorted.forEach(function (match) {
     const li = document.createElement("li");
+    if (match.id === editingMatchId) {
+      li.classList.add("editing");
+    }
 
     const gameTag = document.createElement("span");
     gameTag.classList.add("tag");
@@ -502,21 +721,27 @@ function renderMatchNight() {
 
     const summary = document.createElement("span");
     summary.classList.add("match-summary");
-    summary.textContent = match.team + " · " + ordinal(match.placement) + " · " + teamElims(match) + " elims";
+    const elims = teamElims(match);
+    summary.textContent = teamName(match.teamId) + " · " + ordinal(match.placement) + " · " + elims + (elims === 1 ? " elim" : " elims");
 
     const points = document.createElement("span");
     points.classList.add("match-points");
     points.textContent = matchPoints(match, rules) + " pts";
 
-    const deleteButton = document.createElement("button");
-    deleteButton.classList.add("icon-button");
-    deleteButton.textContent = "Delete";
-    deleteButton.setAttribute("data-id", match.id);
-    deleteButton.addEventListener("click", function (event) {
-      deleteMatch(event.target.getAttribute("data-id"));
-    });
+    li.append(gameTag, summary, points);
 
-    li.append(gameTag, summary, points, deleteButton);
+    // Staff get Edit and Delete buttons on every result.
+    if (isStaff()) {
+      li.append(
+        makeSmallButton("Edit", function () {
+          startEditingMatch(match.id);
+        }),
+        makeSmallButton("Delete", function () {
+          deleteMatch(match.id);
+        }, true)
+      );
+    }
+
     matchList.appendChild(li);
   });
 }
@@ -554,7 +779,7 @@ function renderSeason() {
   const search = searchInput.value.trim().toLowerCase();
 
   if (teams.length === 0) {
-    showMessage(seasonMessage, "No teams yet. Add some on the Rosters tab.");
+    showMessage(seasonMessage, "No teams yet. Staff can add them on the Rosters tab.");
     renderTeamDetail();
     return;
   }
@@ -567,7 +792,7 @@ function renderSeason() {
   }
 
   if (matches.length === 0) {
-    showMessage(seasonMessage, "No results yet. Enter some on Match night, or click \"Load sample season\".");
+    showMessage(seasonMessage, "No results yet. They'll show up here once staff enter them on Match night.");
   } else if (shown === 0) {
     showMessage(seasonMessage, "Nothing matches \"" + searchInput.value.trim() + "\".");
   } else {
@@ -597,7 +822,7 @@ function renderTeamStandings(search) {
     shown = shown + 1;
 
     const tr = document.createElement("tr");
-    if (row.team === selectedTeam) {
+    if (row.teamId === selectedTeamId) {
       tr.classList.add("selected");
     }
     tr.appendChild(makeRankCell(index + 1));
@@ -607,18 +832,18 @@ function renderTeamStandings(search) {
     const nameButton = document.createElement("button");
     nameButton.classList.add("link-button");
     nameButton.textContent = row.team;
-    nameButton.setAttribute("data-team", row.team);
-    nameButton.addEventListener("click", function (event) {
-      selectTeam(event.target.getAttribute("data-team"));
+    nameButton.addEventListener("click", function () {
+      selectTeam(row.teamId);
     });
     nameCell.appendChild(nameButton);
     tr.appendChild(nameCell);
 
+    const team = findTeam(row.teamId);
     for (let w = 1; w <= rules.weeks; w++) {
       const weekMatches = matches.filter(function (match) {
         return match.week === w;
       });
-      const week = teamStats(row.team, weekMatches, rules);
+      const week = teamStats(team, weekMatches, rules);
       tr.appendChild(makeCell(week.games === 0 ? "–" : week.points, "num"));
     }
 
@@ -661,8 +886,8 @@ function renderPlayerTable(search) {
   return shown;
 }
 
-function selectTeam(teamName) {
-  selectedTeam = teamName;
+function selectTeam(teamId) {
+  selectedTeamId = teamId;
   renderSeason();
   teamDetail.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -685,10 +910,10 @@ function makeStatCard(label, value) {
 
 function renderTeamDetail() {
   teamDetail.innerHTML = "";
-  const team = findTeam(selectedTeam);
+  const team = findTeam(selectedTeamId);
 
   if (team === undefined) {
-    selectedTeam = null;
+    selectedTeamId = null;
     teamDetail.classList.add("hide");
     return;
   }
@@ -703,14 +928,14 @@ function renderTeamDetail() {
   title.textContent = team.name;
   const sub = document.createElement("p");
   sub.classList.add("muted");
-  sub.textContent = team.school + " · " + team.players.join(" & ");
+  const playerNames = team.players.map(function (player) {
+    return player.name;
+  });
+  sub.textContent = (team.school === "" ? "No school listed" : team.school) + " · " + playerNames.join(" & ");
   titleBox.append(title, sub);
 
-  const closeButton = document.createElement("button");
-  closeButton.classList.add("icon-button");
-  closeButton.textContent = "Close";
-  closeButton.addEventListener("click", function () {
-    selectedTeam = null;
+  const closeButton = makeSmallButton("Close", function () {
+    selectedTeamId = null;
     renderSeason();
   });
 
@@ -720,9 +945,9 @@ function renderTeamDetail() {
   // Season stat cards
   const ranked = standings(teams, matches, rules);
   const rank = ranked.findIndex(function (row) {
-    return row.team === team.name;
+    return row.teamId === team.id;
   }) + 1;
-  const stats = teamStats(team.name, matches, rules);
+  const stats = teamStats(team, matches, rules);
 
   const cards = document.createElement("div");
   cards.classList.add("stat-cards");
@@ -747,7 +972,7 @@ function renderTeamDetail() {
     const weekMatches = matches.filter(function (match) {
       return match.week === w;
     });
-    const week = teamStats(team.name, weekMatches, rules);
+    const week = teamStats(team, weekMatches, rules);
     if (week.games > 0) {
       weekRows.push(["Week " + w, week.games, week.elims, week.avgPlace.toFixed(1), week.points]);
     }
@@ -767,8 +992,8 @@ function renderTeamDetail() {
   playersTitle.textContent = "Players";
   teamDetail.appendChild(playersTitle);
 
-  const playerRows = team.players.map(function (playerName) {
-    const p = playerStats(playerName, team.name, matches, rules);
+  const playerRows = team.players.map(function (player) {
+    const p = playerStats(player, team, matches, rules);
     return [
       p.name,
       p.games,
@@ -783,118 +1008,138 @@ function renderTeamDetail() {
   teamDetail.appendChild(makeTable(["Player", "Games", "Elims", "Avg elims", "Deaths", "K/D", "Points", "Avg pts"], playerRows));
 }
 
-// Replaces the current teams and results with the files in /data.
-async function loadSampleSeason() {
-  if (matches.length > 0) {
-    const ok = confirm("Replace your current teams and results with the sample season?");
-    if (!ok) {
-      return;
-    }
+// Staff only: replaces every team and result with the sample season.
+loadSampleButton.addEventListener("click", async function () {
+  if (matches.length > 0 && !confirm("Replace ALL teams and results with the sample season?")) {
+    return;
   }
 
   loadSampleButton.disabled = true;
   showMessage(seasonMessage, "Loading sample season...");
-
   try {
-    const sampleTeams = await loadJson("data/teams.json");
-    const sampleMatches = await loadJson("data/sample-matches.json");
-
-    teams = sampleTeams;
-    matches = sampleMatches;
-    selectedTeam = null;
-    saveData();
-    renderAll();
+    await api("POST", "/api/sample-season");
+    selectedTeamId = null;
+    stopEditingMatch();
+    stopEditingTeam();
+    await refresh();
+    weekSelect.value = latestWeek();
+    renderMatchNight();
   } catch (error) {
-    showMessage(seasonMessage, "Couldn't load the sample season. Please try again.");
-    console.log(error);
+    showMessage(seasonMessage, error.message);
   }
-
   loadSampleButton.disabled = false;
-}
-
-loadSampleButton.addEventListener("click", function () {
-  loadSampleSeason();
 });
 
-clearResultsButton.addEventListener("click", function () {
+clearResultsButton.addEventListener("click", async function () {
   if (matches.length === 0) {
     return;
   }
-  const ok = confirm("Delete all " + matches.length + " results? Teams will be kept.");
-  if (!ok) {
+  if (!confirm("Delete all " + matches.length + " results? Teams will be kept.")) {
     return;
   }
-  matches = [];
-  saveData();
-  renderAll();
+
+  try {
+    await api("DELETE", "/api/matches");
+    stopEditingMatch();
+    await refresh();
+  } catch (error) {
+    showMessage(seasonMessage, error.message);
+  }
 });
 
 // ---------------------------------------------------------------
 // Rosters
 // ---------------------------------------------------------------
-teamForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-
-  const name = teamNameInput.value.trim();
-  const school = schoolInput.value.trim();
-  const player1 = player1Input.value.trim();
-  const player2 = player2Input.value.trim();
-
-  if (name === "" || player1 === "" || player2 === "") {
-    showStatus(teamFormStatus, "Team name and both players are required.", true);
+function startEditingTeam(teamId) {
+  const team = findTeam(teamId);
+  if (team === undefined) {
     return;
   }
 
-  const existingIndex = teams.findIndex(function (team) {
-    return team.name.toLowerCase() === name.toLowerCase();
-  });
-  if (existingIndex !== -1) {
-    showStatus(teamFormStatus, "There's already a team called " + teams[existingIndex].name + ".", true);
-    return;
-  }
+  editingTeamId = team.id;
+  teamNameInput.value = team.name;
+  schoolInput.value = team.school;
+  player1Input.value = team.players[0] ? team.players[0].name : "";
+  player2Input.value = team.players[1] ? team.players[1].name : "";
 
-  if (player1.toLowerCase() === player2.toLowerCase()) {
-    showStatus(teamFormStatus, "The two players need different names.", true);
-    return;
-  }
+  teamFormTitle.textContent = "Edit " + team.name;
+  teamSubmit.textContent = "Save changes";
+  teamCancel.classList.remove("hide");
+  teamFormHint.classList.remove("hide");
+  teamForm.classList.add("editing");
+  hideMessage(teamFormStatus);
 
-  teams.push({
-    name: name,
-    school: school,
-    players: [player1, player2]
-  });
-  saveData();
+  renderRosters();
+  teamForm.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
+function stopEditingTeam() {
+  editingTeamId = null;
   teamForm.reset();
-  showStatus(teamFormStatus, name + " was added.", false);
-  renderAll();
+  teamFormTitle.textContent = "Add a team";
+  teamSubmit.textContent = "Add team";
+  teamCancel.classList.add("hide");
+  teamFormHint.classList.add("hide");
+  teamForm.classList.remove("editing");
+  hideMessage(teamFormStatus);
+}
+
+teamCancel.addEventListener("click", function () {
+  stopEditingTeam();
+  renderRosters();
 });
 
-function deleteTeam(teamName) {
+teamForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const team = {
+    name: teamNameInput.value.trim(),
+    school: schoolInput.value.trim(),
+    players: [player1Input.value.trim(), player2Input.value.trim()]
+  };
+
+  teamSubmit.disabled = true;
+  try {
+    let message = team.name + " was added.";
+    if (editingTeamId === null) {
+      await api("POST", "/api/teams", team);
+    } else {
+      await api("PUT", "/api/teams/" + editingTeamId, team);
+      message = team.name + " was updated.";
+    }
+
+    stopEditingTeam();
+    await refresh();
+    showStatus(teamFormStatus, message, false);
+  } catch (error) {
+    showStatus(teamFormStatus, error.message, true);
+  }
+  teamSubmit.disabled = false;
+});
+
+async function deleteTeam(teamId) {
+  const team = findTeam(teamId);
   const teamMatches = matches.filter(function (match) {
-    return match.team === teamName;
+    return match.teamId === teamId;
   });
 
-  let question = "Delete " + teamName + "?";
+  let question = "Delete " + team.name + "?";
   if (teamMatches.length > 0) {
-    question = "Delete " + teamName + " and its " + teamMatches.length + " results?";
+    question = "Delete " + team.name + " and its " + teamMatches.length + " results?";
   }
   if (!confirm(question)) {
     return;
   }
 
-  const index = teams.findIndex(function (team) {
-    return team.name === teamName;
-  });
-  teams.splice(index, 1);
-
-  // Keep every match that isn't this team's.
-  matches = matches.filter(function (match) {
-    return match.team !== teamName;
-  });
-
-  saveData();
-  renderAll();
+  try {
+    await api("DELETE", "/api/teams/" + teamId);
+    if (editingTeamId === teamId) {
+      stopEditingTeam();
+    }
+    await refresh();
+  } catch (error) {
+    showStatus(teamFormStatus, error.message, true);
+  }
 }
 
 function renderRosters() {
@@ -902,14 +1147,17 @@ function renderRosters() {
   rosterTitle.textContent = teams.length + (teams.length === 1 ? " team" : " teams");
 
   if (teams.length === 0) {
-    showMessage(rosterMessage, "No teams yet. Add one with the form.");
+    showMessage(rosterMessage, "No teams yet.");
     return;
   }
   hideMessage(rosterMessage);
 
   teams.forEach(function (team) {
-    const stats = teamStats(team.name, matches, rules);
+    const stats = teamStats(team, matches, rules);
     const li = document.createElement("li");
+    if (team.id === editingTeamId) {
+      li.classList.add("editing");
+    }
 
     const info = document.createElement("div");
     info.classList.add("roster-info");
@@ -924,10 +1172,10 @@ function renderRosters() {
 
     const players = document.createElement("div");
     players.classList.add("chips");
-    team.players.forEach(function (playerName) {
+    team.players.forEach(function (player) {
       const chip = document.createElement("span");
       chip.classList.add("chip");
-      chip.textContent = playerName;
+      chip.textContent = player.name;
       players.appendChild(chip);
     });
 
@@ -937,15 +1185,19 @@ function renderRosters() {
     record.classList.add("roster-record");
     record.textContent = stats.games + " games · " + stats.points + " pts";
 
-    const deleteButton = document.createElement("button");
-    deleteButton.classList.add("icon-button");
-    deleteButton.textContent = "Delete";
-    deleteButton.setAttribute("data-team", team.name);
-    deleteButton.addEventListener("click", function (event) {
-      deleteTeam(event.target.getAttribute("data-team"));
-    });
+    li.append(info, record);
 
-    li.append(info, record, deleteButton);
+    if (isStaff()) {
+      li.append(
+        makeSmallButton("Edit", function () {
+          startEditingTeam(team.id);
+        }),
+        makeSmallButton("Delete", function () {
+          deleteTeam(team.id);
+        }, true)
+      );
+    }
+
     rosterList.appendChild(li);
   });
 }
@@ -979,13 +1231,91 @@ function renderRules() {
   pointsNote.textContent = "Places after " + ordinal(rules.placementPoints.length) + " earn 0 placement points but still score elimination points.";
 }
 
+// One number box per place in the staff rules editor.
+function addPlaceInput(points) {
+  const place = pointsInputs.children.length + 1;
+
+  const li = document.createElement("li");
+  const label = document.createElement("label");
+  label.textContent = ordinal(place);
+
+  const input = document.createElement("input");
+  input.type = "number";
+  input.min = 0;
+  input.max = 500;
+  input.required = true;
+  input.value = points;
+  input.classList.add("place-input");
+
+  label.appendChild(input);
+  li.appendChild(label);
+  pointsInputs.appendChild(li);
+}
+
+// Copies the saved rules into the editor (also used by "Discard changes").
+function fillRulesForm() {
+  rulesSeasonInput.value = rules.seasonName;
+  rulesWeeksInput.value = rules.weeks;
+  rulesGamesInput.value = rules.matchesPerWeek;
+  rulesElimInput.value = rules.pointsPerElim;
+
+  pointsInputs.innerHTML = "";
+  rules.placementPoints.forEach(function (points) {
+    addPlaceInput(points);
+  });
+  hideMessage(rulesStatus);
+}
+
+addPlaceButton.addEventListener("click", function () {
+  addPlaceInput(0);
+});
+
+removePlaceButton.addEventListener("click", function () {
+  if (pointsInputs.children.length > 1) {
+    pointsInputs.lastElementChild.remove();
+  }
+});
+
+rulesDiscard.addEventListener("click", function () {
+  fillRulesForm();
+});
+
+rulesForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const placementPoints = [];
+  pointsInputs.querySelectorAll(".place-input").forEach(function (input) {
+    placementPoints.push(Number(input.value));
+  });
+
+  const newRules = {
+    seasonName: rulesSeasonInput.value.trim(),
+    weeks: Number(rulesWeeksInput.value),
+    matchesPerWeek: Number(rulesGamesInput.value),
+    pointsPerElim: Number(rulesElimInput.value),
+    placementPoints: placementPoints
+  };
+
+  try {
+    await api("PUT", "/api/rules", newRules);
+    await refresh();
+    fillRulesForm();
+    showStatus(rulesStatus, "Rules saved. Every score has been recalculated.", false);
+  } catch (error) {
+    showStatus(rulesStatus, error.message, true);
+  }
+});
+
 // ---------------------------------------------------------------
 // Start up
 // ---------------------------------------------------------------
 
-// Re-draw everything that depends on teams or matches.
+// Re-draw everything that depends on the league data.
 function renderAll() {
+  fillNumberSelect(weekSelect, rules.weeks, "Week");
+  fillNumberSelect(gameSelect, rules.matchesPerWeek, "Game");
   fillTeamSelect();
+  renderRules();
   renderMatchNight();
   renderSeason();
   renderRosters();
@@ -993,46 +1323,46 @@ function renderAll() {
 
 // Start the week picker on the latest week that has results.
 function latestWeek() {
-  return matches.reduce(function (latest, match) {
-    return Math.max(latest, match.week);
+  const latest = matches.reduce(function (highest, match) {
+    return Math.max(highest, match.week);
   }, 1);
+  return Math.min(latest, rules.weeks);
 }
 
 async function init() {
-  setTheme(localStorage.getItem("theme") === "dark" ? "dark" : "light");
+  // Dark mode is the default; light only if the visitor picked it with the toggle.
+  setTheme(localStorage.getItem("chosenTheme") === "light" ? "light" : "dark");
+  showPageFromHash();
   showMessage(appMessage, "Loading league data...");
 
   try {
-    rules = await loadJson("data/rules.json");
-
-    // First visit: start from data/teams.json. After that, use what was saved.
-    const savedTeams = loadSaved("teams");
-    if (savedTeams === null) {
-      teams = await loadJson("data/teams.json");
-    } else {
-      teams = savedTeams;
-    }
-
-    const savedMatches = loadSaved("matches");
-    if (savedMatches !== null) {
-      matches = savedMatches;
-    }
-
+    await loadLeague();
     hideMessage(appMessage);
   } catch (error) {
-    showMessage(appMessage, "Couldn't load the league data. Open this page with Live Server — fetch() doesn't work from a file:// URL.");
+    showMessage(appMessage, "Couldn't reach the league server. Start it with npm start, then open http://localhost:3000.");
     appMessage.classList.add("error");
     console.log(error);
     return;
   }
 
-  fillNumberSelect(weekSelect, rules.weeks, "Week");
-  fillNumberSelect(gameSelect, rules.matchesPerWeek, "Game");
-  weekSelect.value = latestWeek();
-
-  renderRules();
-  renderPlayerInputs();
   renderAll();
+  weekSelect.value = latestWeek();
+  renderMatchNight();
+  fillRulesForm();
+  await checkStaff();
+
+  // Public viewers get fresh scores every 30 seconds without reloading.
+  // (Skipped for staff so nothing moves while they're typing.)
+  setInterval(async function () {
+    if (isStaff() || document.hidden) {
+      return;
+    }
+    try {
+      await refresh();
+    } catch (error) {
+      console.log(error);
+    }
+  }, 30000);
 }
 
 init();

@@ -41,9 +41,11 @@ export function killDeath(elims, deaths) {
 }
 
 // Season (or single-week) stats for one team.
-export function teamStats(teamName, matches, rules) {
+// team is { id, name }. Matches point at their team by id (match.teamId),
+// so renaming a team never loses its results.
+export function teamStats(team, matches, rules) {
   const teamMatches = matches.filter(function (match) {
-    return match.team === teamName;
+    return match.teamId === team.id;
   });
 
   const games = teamMatches.length;
@@ -61,7 +63,8 @@ export function teamStats(teamName, matches, rules) {
   }, 0);
 
   return {
-    team: teamName,
+    teamId: team.id,
+    team: team.name,
     games: games,
     elims: elims,
     points: points,
@@ -90,26 +93,26 @@ export function compareStandings(a, b) {
 export function standings(teams, matches, rules) {
   return teams
     .map(function (team) {
-      return teamStats(team.name, matches, rules);
+      return teamStats(team, matches, rules);
     })
     .sort(compareStandings);
 }
 
-// Stats for one player on one team.
+// Stats for one player on one team. player is { id, name }, team is { id, name }.
 // A player's points = their team's placement points + their OWN elim points.
-export function playerStats(playerName, teamName, matches, rules) {
+export function playerStats(player, team, matches, rules) {
   let games = 0;
   let elims = 0;
   let deaths = 0;
   let points = 0;
 
   matches.forEach(function (match) {
-    if (match.team !== teamName) {
+    if (match.teamId !== team.id) {
       return;
     }
 
-    const line = match.players.find(function (player) {
-      return player.name === playerName;
+    const line = match.players.find(function (result) {
+      return result.playerId === player.id;
     });
 
     if (line === undefined) {
@@ -123,8 +126,9 @@ export function playerStats(playerName, teamName, matches, rules) {
   });
 
   return {
-    name: playerName,
-    team: teamName,
+    playerId: player.id,
+    name: player.name,
+    team: team.name,
     games: games,
     elims: elims,
     deaths: deaths,
@@ -140,8 +144,8 @@ export function allPlayerStats(teams, matches, rules) {
   const rows = [];
 
   teams.forEach(function (team) {
-    team.players.forEach(function (playerName) {
-      rows.push(playerStats(playerName, team.name, matches, rules));
+    team.players.forEach(function (player) {
+      rows.push(playerStats(player, team, matches, rules));
     });
   });
 

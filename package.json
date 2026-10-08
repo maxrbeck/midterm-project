@@ -1,0 +1,19 @@
+{
+  "name": "league-scorer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fortnite league scorer",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "dev": "node --watch --env-file-if-exists=.env server.js",
+    "create-admin": "node --env-file-if-exists=.env db/create-admin.js",
+    "db:reset": "node --env-file-if-exists=.env db/reset.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

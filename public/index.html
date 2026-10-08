@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Sora:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<!-- Starts in dark mode. script.js switches to light only if the visitor chose it. -->
+<body class="dark">
   <header class="site-header">
     <div class="brand">
       <span class="brand-mark">LS</span>
@@ -19,22 +20,35 @@
       </div>
     </div>
 
+    <!-- Each tab is a link to a #hash. script.js shows the page that matches the hash. -->
     <nav class="tabs">
-      <button class="tab active" data-page="match-night">Match night</button>
-      <button class="tab" data-page="season">Season tracker</button>
-      <button class="tab" data-page="rosters">Rosters</button>
-      <button class="tab" data-page="rules">Scoring rules</button>
+      <a class="tab" href="#match-night">Match night</a>
+      <a class="tab" href="#season">Season tracker</a>
+      <a class="tab" href="#rosters">Rosters</a>
+      <a class="tab" href="#rules">Scoring rules</a>
     </nav>
 
-    <button id="theme-toggle" class="theme-toggle">Dark mode</button>
+    <div class="header-actions">
+      <button id="sign-in-button" class="header-button">Staff sign in</button>
+      <div class="staff-badge hide" id="staff-badge">
+        <span class="staff-dot"></span>
+        <span id="staff-email"></span>
+        <button id="sign-out-button" class="header-button">Sign out</button>
+      </div>
+      <button id="theme-toggle" class="header-button">Light mode</button>
+    </div>
   </header>
 
   <main>
     <!-- Shows "Loading..." and error messages for the whole app -->
     <p class="message hide" id="app-message"></p>
 
+    <p class="admin-banner admin-only">
+      <strong>Admin view.</strong> You can add, edit and delete teams, results and rules. Changes save to the database right away.
+    </p>
+
     <!-- ===================== MATCH NIGHT ===================== -->
-    <section class="page" id="match-night">
+    <section class="page" id="page-match-night">
       <div class="page-head">
         <h1>Match night</h1>
         <label class="inline-label">Week
@@ -43,15 +57,15 @@
       </div>
 
       <div class="columns">
-        <form class="panel form-panel" id="result-form">
-          <h2>Enter a result</h2>
+        <form class="panel form-panel admin-only" id="result-form">
+          <h2 id="result-form-title">Enter a result</h2>
 
           <div class="field-row">
             <label>Game
               <select id="game-select"></select>
             </label>
             <label>Placement
-              <input type="number" id="placement-input" min="1" max="50" placeholder="1" required>
+              <input type="number" id="placement-input" min="1" max="100" placeholder="1" required>
             </label>
           </div>
 
@@ -62,7 +76,10 @@
           <div class="player-inputs" id="player-inputs"></div>
 
           <p class="form-status hide" id="form-status"></p>
-          <button type="submit" class="primary">Save result</button>
+          <div class="form-buttons">
+            <button type="submit" class="primary" id="result-submit">Save result</button>
+            <button type="button" class="secondary hide" id="result-cancel">Cancel</button>
+          </div>
         </form>
 
         <div class="panel results-panel">
@@ -82,10 +99,10 @@
     </section>
 
     <!-- ===================== SEASON TRACKER ===================== -->
-    <section class="page hide" id="season">
+    <section class="page hide" id="page-season">
       <div class="page-head">
         <h1>Season tracker</h1>
-        <div class="actions">
+        <div class="actions admin-only">
           <button id="load-sample" class="secondary">Load sample season</button>
           <button id="clear-results" class="danger">Clear all results</button>
         </div>
@@ -116,28 +133,32 @@
     </section>
 
     <!-- ===================== ROSTERS ===================== -->
-    <section class="page hide" id="rosters">
+    <section class="page hide" id="page-rosters">
       <div class="page-head">
         <h1>Rosters</h1>
       </div>
 
       <div class="columns">
-        <form class="panel form-panel" id="team-form">
-          <h2>Add a team</h2>
+        <form class="panel form-panel admin-only" id="team-form">
+          <h2 id="team-form-title">Add a team</h2>
           <label>Team name
-            <input type="text" id="team-name-input" required>
+            <input type="text" id="team-name-input" maxlength="40" required>
           </label>
           <label>School
-            <input type="text" id="school-input">
+            <input type="text" id="school-input" maxlength="60">
           </label>
           <label>Player 1 (Epic name)
-            <input type="text" id="player1-input" required>
+            <input type="text" id="player1-input" maxlength="30" required>
           </label>
           <label>Player 2 (Epic name)
-            <input type="text" id="player2-input" required>
+            <input type="text" id="player2-input" maxlength="30" required>
           </label>
+          <p class="hint hide" id="team-form-hint">Renaming a player keeps their stats.</p>
           <p class="form-status hide" id="team-form-status"></p>
-          <button type="submit" class="primary">Add team</button>
+          <div class="form-buttons">
+            <button type="submit" class="primary" id="team-submit">Add team</button>
+            <button type="button" class="secondary hide" id="team-cancel">Cancel</button>
+          </div>
         </form>
 
         <div class="panel">
@@ -149,7 +170,7 @@
     </section>
 
     <!-- ===================== SCORING RULES ===================== -->
-    <section class="page hide" id="rules">
+    <section class="page hide" id="page-rules">
       <div class="page-head">
         <h1>Scoring rules</h1>
       </div>
@@ -183,8 +204,58 @@
           <p class="note" id="points-note"></p>
         </div>
       </div>
+
+      <form class="panel admin-only" id="rules-form">
+        <h2>Edit rules</h2>
+        <div class="field-row field-row-wrap">
+          <label>Season name
+            <input type="text" id="rules-season-input" maxlength="40" required>
+          </label>
+          <label>Weeks
+            <input type="number" id="rules-weeks-input" min="1" max="20" required>
+          </label>
+          <label>Games per week
+            <input type="number" id="rules-games-input" min="1" max="10" required>
+          </label>
+          <label>Points per elim
+            <input type="number" id="rules-elim-input" min="0" max="20" required>
+          </label>
+        </div>
+
+        <h3>Placement points</h3>
+        <ul class="points-grid points-inputs" id="points-inputs"></ul>
+        <div class="form-buttons form-buttons-left">
+          <button type="button" class="secondary" id="add-place">Add place</button>
+          <button type="button" class="secondary" id="remove-place">Remove last</button>
+        </div>
+
+        <p class="form-status hide" id="rules-status"></p>
+        <div class="form-buttons">
+          <button type="submit" class="primary">Save rules</button>
+          <button type="button" class="secondary" id="rules-discard">Discard changes</button>
+        </div>
+      </form>
     </section>
   </main>
+
+  <!-- Staff sign-in pop-up. showModal() opens it, close() hides it. -->
+  <dialog class="dialog" id="login-dialog">
+    <form id="login-form">
+      <h2>Staff sign in</h2>
+      <p class="hint">Staff can enter results, edit teams and change the rules.</p>
+      <label>Email
+        <input type="email" id="login-email" autocomplete="username" required>
+      </label>
+      <label>Password
+        <input type="password" id="login-password" autocomplete="current-password" required>
+      </label>
+      <p class="form-status hide" id="login-status"></p>
+      <div class="form-buttons">
+        <button type="submit" class="primary" id="login-submit">Sign in</button>
+        <button type="button" class="secondary" id="login-cancel">Cancel</button>
+      </div>
+    </form>
+  </dialog>
 
   <script type="module" src="script.js"></script>
 </body>
