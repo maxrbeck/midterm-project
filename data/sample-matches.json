@@ -1,0 +1,1826 @@
+[
+  {
+    "id": "m1",
+    "week": 1,
+    "game": 1,
+    "team": "Riverside Ravens",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 5,
+        "deaths": 0
+      },
+      {
+        "name": "NightWing22",
+        "elims": 4,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m2",
+    "week": 1,
+    "game": 1,
+    "team": "Summit Storm",
+    "placement": 10,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "StormChaser",
+        "elims": 2,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m3",
+    "week": 1,
+    "game": 1,
+    "team": "Northgate Owls",
+    "placement": 14,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 2,
+        "deaths": 0
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 1,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m4",
+    "week": 1,
+    "game": 1,
+    "team": "Harbor Hawks",
+    "placement": 15,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "SkyDive",
+        "elims": 0,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m5",
+    "week": 1,
+    "game": 1,
+    "team": "Lakeview Lynx",
+    "placement": 22,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 2,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m6",
+    "week": 1,
+    "game": 1,
+    "team": "Pinecrest Phantoms",
+    "placement": 21,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "Specter",
+        "elims": 0,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m7",
+    "week": 1,
+    "game": 1,
+    "team": "Oakridge Outlaws",
+    "placement": 27,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 1,
+        "deaths": 0
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 2,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m8",
+    "week": 1,
+    "game": 1,
+    "team": "Bayside Blitz",
+    "placement": 32,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "BoxFight",
+        "elims": 0,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m9",
+    "week": 1,
+    "game": 2,
+    "team": "Harbor Hawks",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 4,
+        "deaths": 0
+      },
+      {
+        "name": "SkyDive",
+        "elims": 1,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m10",
+    "week": 1,
+    "game": 2,
+    "team": "Summit Storm",
+    "placement": 6,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "StormChaser",
+        "elims": 1,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m11",
+    "week": 1,
+    "game": 2,
+    "team": "Northgate Owls",
+    "placement": 11,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 3,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m12",
+    "week": 1,
+    "game": 2,
+    "team": "Oakridge Outlaws",
+    "placement": 15,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m13",
+    "week": 1,
+    "game": 2,
+    "team": "Riverside Ravens",
+    "placement": 17,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 2,
+        "deaths": 1
+      },
+      {
+        "name": "NightWing22",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m14",
+    "week": 1,
+    "game": 2,
+    "team": "Pinecrest Phantoms",
+    "placement": 23,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "Specter",
+        "elims": 0,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m15",
+    "week": 1,
+    "game": 2,
+    "team": "Bayside Blitz",
+    "placement": 30,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "BoxFight",
+        "elims": 1,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m16",
+    "week": 1,
+    "game": 2,
+    "team": "Lakeview Lynx",
+    "placement": 31,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m17",
+    "week": 1,
+    "game": 3,
+    "team": "Riverside Ravens",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 2,
+        "deaths": 0
+      },
+      {
+        "name": "NightWing22",
+        "elims": 5,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m18",
+    "week": 1,
+    "game": 3,
+    "team": "Northgate Owls",
+    "placement": 9,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 4,
+        "deaths": 1
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 3,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m19",
+    "week": 1,
+    "game": 3,
+    "team": "Summit Storm",
+    "placement": 10,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "StormChaser",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m20",
+    "week": 1,
+    "game": 3,
+    "team": "Oakridge Outlaws",
+    "placement": 15,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m21",
+    "week": 1,
+    "game": 3,
+    "team": "Bayside Blitz",
+    "placement": 18,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "BoxFight",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m22",
+    "week": 1,
+    "game": 3,
+    "team": "Harbor Hawks",
+    "placement": 25,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "SkyDive",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m23",
+    "week": 1,
+    "game": 3,
+    "team": "Lakeview Lynx",
+    "placement": 28,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 1,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m24",
+    "week": 1,
+    "game": 3,
+    "team": "Pinecrest Phantoms",
+    "placement": 31,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "Specter",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m25",
+    "week": 1,
+    "game": 4,
+    "team": "Northgate Owls",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 1,
+        "deaths": 0
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 5,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m26",
+    "week": 1,
+    "game": 4,
+    "team": "Summit Storm",
+    "placement": 6,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 2,
+        "deaths": 1
+      },
+      {
+        "name": "StormChaser",
+        "elims": 4,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m27",
+    "week": 1,
+    "game": 4,
+    "team": "Riverside Ravens",
+    "placement": 10,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "NightWing22",
+        "elims": 1,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m28",
+    "week": 1,
+    "game": 4,
+    "team": "Pinecrest Phantoms",
+    "placement": 17,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "Specter",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m29",
+    "week": 1,
+    "game": 4,
+    "team": "Harbor Hawks",
+    "placement": 21,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "SkyDive",
+        "elims": 0,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m30",
+    "week": 1,
+    "game": 4,
+    "team": "Lakeview Lynx",
+    "placement": 22,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m31",
+    "week": 1,
+    "game": 4,
+    "team": "Oakridge Outlaws",
+    "placement": 25,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 2,
+        "deaths": 1
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 2,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m32",
+    "week": 1,
+    "game": 4,
+    "team": "Bayside Blitz",
+    "placement": 34,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 1,
+        "deaths": 0
+      },
+      {
+        "name": "BoxFight",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m33",
+    "week": 2,
+    "game": 1,
+    "team": "Summit Storm",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 5,
+        "deaths": 0
+      },
+      {
+        "name": "StormChaser",
+        "elims": 5,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m34",
+    "week": 2,
+    "game": 1,
+    "team": "Riverside Ravens",
+    "placement": 7,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 1,
+        "deaths": 0
+      },
+      {
+        "name": "NightWing22",
+        "elims": 2,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m35",
+    "week": 2,
+    "game": 1,
+    "team": "Harbor Hawks",
+    "placement": 10,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "SkyDive",
+        "elims": 1,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m36",
+    "week": 2,
+    "game": 1,
+    "team": "Northgate Owls",
+    "placement": 18,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 2,
+        "deaths": 1
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m37",
+    "week": 2,
+    "game": 1,
+    "team": "Pinecrest Phantoms",
+    "placement": 21,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "Specter",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m38",
+    "week": 2,
+    "game": 1,
+    "team": "Lakeview Lynx",
+    "placement": 22,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 2,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 1,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m39",
+    "week": 2,
+    "game": 1,
+    "team": "Oakridge Outlaws",
+    "placement": 25,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m40",
+    "week": 2,
+    "game": 1,
+    "team": "Bayside Blitz",
+    "placement": 30,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "BoxFight",
+        "elims": 1,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m41",
+    "week": 2,
+    "game": 2,
+    "team": "Harbor Hawks",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 1,
+        "deaths": 0
+      },
+      {
+        "name": "SkyDive",
+        "elims": 2,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m42",
+    "week": 2,
+    "game": 2,
+    "team": "Riverside Ravens",
+    "placement": 10,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "NightWing22",
+        "elims": 2,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m43",
+    "week": 2,
+    "game": 2,
+    "team": "Northgate Owls",
+    "placement": 13,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 2,
+        "deaths": 1
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 1,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m44",
+    "week": 2,
+    "game": 2,
+    "team": "Oakridge Outlaws",
+    "placement": 16,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 1,
+        "deaths": 0
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m45",
+    "week": 2,
+    "game": 2,
+    "team": "Bayside Blitz",
+    "placement": 17,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "BoxFight",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m46",
+    "week": 2,
+    "game": 2,
+    "team": "Summit Storm",
+    "placement": 23,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 2,
+        "deaths": 1
+      },
+      {
+        "name": "StormChaser",
+        "elims": 3,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m47",
+    "week": 2,
+    "game": 2,
+    "team": "Pinecrest Phantoms",
+    "placement": 28,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 1,
+        "deaths": 0
+      },
+      {
+        "name": "Specter",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m48",
+    "week": 2,
+    "game": 2,
+    "team": "Lakeview Lynx",
+    "placement": 30,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 2,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m49",
+    "week": 2,
+    "game": 3,
+    "team": "Summit Storm",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 3,
+        "deaths": 0
+      },
+      {
+        "name": "StormChaser",
+        "elims": 5,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m50",
+    "week": 2,
+    "game": 3,
+    "team": "Harbor Hawks",
+    "placement": 10,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 1,
+        "deaths": 0
+      },
+      {
+        "name": "SkyDive",
+        "elims": 2,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m51",
+    "week": 2,
+    "game": 3,
+    "team": "Lakeview Lynx",
+    "placement": 13,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 2,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 1,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m52",
+    "week": 2,
+    "game": 3,
+    "team": "Oakridge Outlaws",
+    "placement": 15,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m53",
+    "week": 2,
+    "game": 3,
+    "team": "Northgate Owls",
+    "placement": 20,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 4,
+        "deaths": 1
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 3,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m54",
+    "week": 2,
+    "game": 3,
+    "team": "Riverside Ravens",
+    "placement": 24,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 3,
+        "deaths": 1
+      },
+      {
+        "name": "NightWing22",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m55",
+    "week": 2,
+    "game": 3,
+    "team": "Pinecrest Phantoms",
+    "placement": 28,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "Specter",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m56",
+    "week": 2,
+    "game": 3,
+    "team": "Bayside Blitz",
+    "placement": 33,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "BoxFight",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m57",
+    "week": 2,
+    "game": 4,
+    "team": "Northgate Owls",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 2,
+        "deaths": 0
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 2,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m58",
+    "week": 2,
+    "game": 4,
+    "team": "Summit Storm",
+    "placement": 6,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 3,
+        "deaths": 1
+      },
+      {
+        "name": "StormChaser",
+        "elims": 3,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m59",
+    "week": 2,
+    "game": 4,
+    "team": "Riverside Ravens",
+    "placement": 11,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 3,
+        "deaths": 1
+      },
+      {
+        "name": "NightWing22",
+        "elims": 3,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m60",
+    "week": 2,
+    "game": 4,
+    "team": "Oakridge Outlaws",
+    "placement": 15,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 0,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m61",
+    "week": 2,
+    "game": 4,
+    "team": "Harbor Hawks",
+    "placement": 22,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "SkyDive",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m62",
+    "week": 2,
+    "game": 4,
+    "team": "Bayside Blitz",
+    "placement": 23,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 0,
+        "deaths": 0
+      },
+      {
+        "name": "BoxFight",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m63",
+    "week": 2,
+    "game": 4,
+    "team": "Lakeview Lynx",
+    "placement": 29,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 2,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m64",
+    "week": 2,
+    "game": 4,
+    "team": "Pinecrest Phantoms",
+    "placement": 30,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "Specter",
+        "elims": 1,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m65",
+    "week": 3,
+    "game": 1,
+    "team": "Riverside Ravens",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 3,
+        "deaths": 0
+      },
+      {
+        "name": "NightWing22",
+        "elims": 5,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m66",
+    "week": 3,
+    "game": 1,
+    "team": "Northgate Owls",
+    "placement": 8,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 4,
+        "deaths": 0
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 4,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m67",
+    "week": 3,
+    "game": 1,
+    "team": "Harbor Hawks",
+    "placement": 12,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "SkyDive",
+        "elims": 2,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m68",
+    "week": 3,
+    "game": 1,
+    "team": "Oakridge Outlaws",
+    "placement": 14,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 1,
+        "deaths": 0
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m69",
+    "week": 3,
+    "game": 1,
+    "team": "Summit Storm",
+    "placement": 19,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "StormChaser",
+        "elims": 4,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m70",
+    "week": 3,
+    "game": 1,
+    "team": "Pinecrest Phantoms",
+    "placement": 25,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "Specter",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m71",
+    "week": 3,
+    "game": 1,
+    "team": "Lakeview Lynx",
+    "placement": 26,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 2,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m72",
+    "week": 3,
+    "game": 1,
+    "team": "Bayside Blitz",
+    "placement": 33,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "BoxFight",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m73",
+    "week": 3,
+    "game": 2,
+    "team": "Summit Storm",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 5,
+        "deaths": 0
+      },
+      {
+        "name": "StormChaser",
+        "elims": 4,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m74",
+    "week": 3,
+    "game": 2,
+    "team": "Riverside Ravens",
+    "placement": 5,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 2,
+        "deaths": 1
+      },
+      {
+        "name": "NightWing22",
+        "elims": 5,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m75",
+    "week": 3,
+    "game": 2,
+    "team": "Northgate Owls",
+    "placement": 14,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 4,
+        "deaths": 1
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 2,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m76",
+    "week": 3,
+    "game": 2,
+    "team": "Bayside Blitz",
+    "placement": 15,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "BoxFight",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m77",
+    "week": 3,
+    "game": 2,
+    "team": "Harbor Hawks",
+    "placement": 20,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "SkyDive",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m78",
+    "week": 3,
+    "game": 2,
+    "team": "Oakridge Outlaws",
+    "placement": 24,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 1,
+        "deaths": 0
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m79",
+    "week": 3,
+    "game": 2,
+    "team": "Lakeview Lynx",
+    "placement": 29,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m80",
+    "week": 3,
+    "game": 2,
+    "team": "Pinecrest Phantoms",
+    "placement": 30,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "Specter",
+        "elims": 0,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m81",
+    "week": 3,
+    "game": 3,
+    "team": "Summit Storm",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 3,
+        "deaths": 0
+      },
+      {
+        "name": "StormChaser",
+        "elims": 3,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m82",
+    "week": 3,
+    "game": 3,
+    "team": "Harbor Hawks",
+    "placement": 8,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "SkyDive",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m83",
+    "week": 3,
+    "game": 3,
+    "team": "Northgate Owls",
+    "placement": 14,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 4,
+        "deaths": 1
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 4,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m84",
+    "week": 3,
+    "game": 3,
+    "team": "Riverside Ravens",
+    "placement": 17,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "NightWing22",
+        "elims": 3,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m85",
+    "week": 3,
+    "game": 3,
+    "team": "Bayside Blitz",
+    "placement": 20,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "BoxFight",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m86",
+    "week": 3,
+    "game": 3,
+    "team": "Lakeview Lynx",
+    "placement": 23,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m87",
+    "week": 3,
+    "game": 3,
+    "team": "Oakridge Outlaws",
+    "placement": 26,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 2,
+        "deaths": 0
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m88",
+    "week": 3,
+    "game": 3,
+    "team": "Pinecrest Phantoms",
+    "placement": 32,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "Specter",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m89",
+    "week": 3,
+    "game": 4,
+    "team": "Riverside Ravens",
+    "placement": 1,
+    "players": [
+      {
+        "name": "Corvid",
+        "elims": 3,
+        "deaths": 0
+      },
+      {
+        "name": "NightWing22",
+        "elims": 5,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m90",
+    "week": 3,
+    "game": 4,
+    "team": "Harbor Hawks",
+    "placement": 6,
+    "players": [
+      {
+        "name": "Talonz",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "SkyDive",
+        "elims": 2,
+        "deaths": 0
+      }
+    ]
+  },
+  {
+    "id": "m91",
+    "week": 3,
+    "game": 4,
+    "team": "Summit Storm",
+    "placement": 12,
+    "players": [
+      {
+        "name": "Thundr",
+        "elims": 3,
+        "deaths": 1
+      },
+      {
+        "name": "StormChaser",
+        "elims": 3,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m92",
+    "week": 3,
+    "game": 4,
+    "team": "Northgate Owls",
+    "placement": 13,
+    "players": [
+      {
+        "name": "Zyphr",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "OwlEyes",
+        "elims": 3,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m93",
+    "week": 3,
+    "game": 4,
+    "team": "Oakridge Outlaws",
+    "placement": 22,
+    "players": [
+      {
+        "name": "Bandit",
+        "elims": 1,
+        "deaths": 0
+      },
+      {
+        "name": "QuickDraw",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m94",
+    "week": 3,
+    "game": 4,
+    "team": "Pinecrest Phantoms",
+    "placement": 21,
+    "players": [
+      {
+        "name": "Ghosted",
+        "elims": 1,
+        "deaths": 1
+      },
+      {
+        "name": "Specter",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m95",
+    "week": 3,
+    "game": 4,
+    "team": "Lakeview Lynx",
+    "placement": 26,
+    "players": [
+      {
+        "name": "PawsUp",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "LynxLock",
+        "elims": 0,
+        "deaths": 1
+      }
+    ]
+  },
+  {
+    "id": "m96",
+    "week": 3,
+    "game": 4,
+    "team": "Bayside Blitz",
+    "placement": 30,
+    "players": [
+      {
+        "name": "Rushr",
+        "elims": 0,
+        "deaths": 1
+      },
+      {
+        "name": "BoxFight",
+        "elims": 1,
+        "deaths": 1
+      }
+    ]
+  }
+]

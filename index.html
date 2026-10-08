@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>League Scorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Sora:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark">LS</span>
+      <div>
+        <p class="brand-name">League Scorer</p>
+        <p class="brand-sub" id="season-name">Battle Royale</p>
+      </div>
+    </div>
+
+    <nav class="tabs">
+      <button class="tab active" data-page="match-night">Match night</button>
+      <button class="tab" data-page="season">Season tracker</button>
+      <button class="tab" data-page="rosters">Rosters</button>
+      <button class="tab" data-page="rules">Scoring rules</button>
+    </nav>
+
+    <button id="theme-toggle" class="theme-toggle">Dark mode</button>
+  </header>
+
+  <main>
+    <!-- Shows "Loading..." and error messages for the whole app -->
+    <p class="message hide" id="app-message"></p>
+
+    <!-- ===================== MATCH NIGHT ===================== -->
+    <section class="page" id="match-night">
+      <div class="page-head">
+        <h1>Match night</h1>
+        <label class="inline-label">Week
+          <select id="week-select"></select>
+        </label>
+      </div>
+
+      <div class="columns">
+        <form class="panel form-panel" id="result-form">
+          <h2>Enter a result</h2>
+
+          <div class="field-row">
+            <label>Game
+              <select id="game-select"></select>
+            </label>
+            <label>Placement
+              <input type="number" id="placement-input" min="1" max="50" placeholder="1" required>
+            </label>
+          </div>
+
+          <label>Team
+            <select id="team-select" required></select>
+          </label>
+
+          <div class="player-inputs" id="player-inputs"></div>
+
+          <p class="form-status hide" id="form-status"></p>
+          <button type="submit" class="primary">Save result</button>
+        </form>
+
+        <div class="panel results-panel">
+          <h2 id="results-title">Week 1 results</h2>
+          <p class="message hide" id="results-message"></p>
+          <div class="table-wrap">
+            <table>
+              <thead id="results-head"></thead>
+              <tbody id="results-body"></tbody>
+            </table>
+          </div>
+
+          <h3>Games entered</h3>
+          <ul class="match-list" id="match-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SEASON TRACKER ===================== -->
+    <section class="page hide" id="season">
+      <div class="page-head">
+        <h1>Season tracker</h1>
+        <div class="actions">
+          <button id="load-sample" class="secondary">Load sample season</button>
+          <button id="clear-results" class="danger">Clear all results</button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="segmented">
+          <button class="seg active" data-view="teams">Teams</button>
+          <button class="seg" data-view="players">Players</button>
+        </div>
+        <label class="inline-label">Search
+          <input type="search" id="search-input" placeholder="Team or player name">
+        </label>
+      </div>
+
+      <div class="panel">
+        <p class="message hide" id="season-message"></p>
+        <div class="table-wrap">
+          <table>
+            <thead id="season-head"></thead>
+            <tbody id="season-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Filled in when you click a team name -->
+      <div class="panel team-detail hide" id="team-detail"></div>
+    </section>
+
+    <!-- ===================== ROSTERS ===================== -->
+    <section class="page hide" id="rosters">
+      <div class="page-head">
+        <h1>Rosters</h1>
+      </div>
+
+      <div class="columns">
+        <form class="panel form-panel" id="team-form">
+          <h2>Add a team</h2>
+          <label>Team name
+            <input type="text" id="team-name-input" required>
+          </label>
+          <label>School
+            <input type="text" id="school-input">
+          </label>
+          <label>Player 1 (Epic name)
+            <input type="text" id="player1-input" required>
+          </label>
+          <label>Player 2 (Epic name)
+            <input type="text" id="player2-input" required>
+          </label>
+          <p class="form-status hide" id="team-form-status"></p>
+          <button type="submit" class="primary">Add team</button>
+        </form>
+
+        <div class="panel">
+          <h2 id="roster-title">Teams</h2>
+          <p class="message hide" id="roster-message"></p>
+          <ul class="roster-list" id="roster-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SCORING RULES ===================== -->
+    <section class="page hide" id="rules">
+      <div class="page-head">
+        <h1>Scoring rules</h1>
+      </div>
+
+      <div class="columns">
+        <div class="panel">
+          <h2>Season</h2>
+          <dl class="rule-list">
+            <dt>Regular season weeks</dt><dd id="rule-weeks"></dd>
+            <dt>Games per week</dt><dd id="rule-games"></dd>
+            <dt>Points per elimination</dt><dd id="rule-elim"></dd>
+          </dl>
+
+          <h3>Tie breakers</h3>
+          <ol class="tie-list">
+            <li>Total points <small>higher first</small></li>
+            <li>Total eliminations <small>higher first</small></li>
+            <li>Average placement <small>lower first</small></li>
+          </ol>
+
+          <h3>How player points work</h3>
+          <p class="note">
+            A team scores its placement points plus points for every elimination either player gets.
+            A player scores the team's placement points plus points for their <em>own</em> eliminations.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h2>Placement points</h2>
+          <ul class="points-grid" id="points-grid"></ul>
+          <p class="note" id="points-note"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

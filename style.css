@@ -1,0 +1,766 @@
+/* ---------------------------------------------------------------
+   Colors live in variables so dark mode only has to swap them.
+   --------------------------------------------------------------- */
+:root {
+  --bg: #e3e6ed;
+  --panel: #ffffff;
+  --panel-2: #f4f5f9;
+  --header-a: #16203a;
+  --header-b: #273866;
+  --header-ink: #a5aec3;
+  --ink: #16213b;
+  --ink-2: #4e5874;
+  --line: #d7dbe4;
+  --accent: #8a1538;
+  --accent-wash: #f7eff1;
+  --ok: #12694a;
+  --ok-wash: #e1f0e9;
+  --bad: #b41847;
+  --bad-wash: #faecf0;
+  --gold: #8c6a07;
+  --gold-wash: #fbf3da;
+  --silver-wash: #eceef3;
+  --bronze-wash: #f7e9df;
+  --bronze: #8a4b1f;
+  --shadow: 0 2px 4px rgba(11, 26, 42, 0.06), 0 8px 20px -12px rgba(11, 26, 42, 0.35);
+  --radius: 8px;
+}
+
+body.dark {
+  --bg: #080b14;
+  --panel: #0f1421;
+  --panel-2: #192031;
+  --header-a: #0a0f1c;
+  --header-b: #16203a;
+  --ink: #eceef4;
+  --ink-2: #b1b7c9;
+  --line: #2a3349;
+  --accent: #de215a;
+  --accent-wash: #2a0f18;
+  --ok: #3fbe8a;
+  --ok-wash: #0f241a;
+  --bad: #f0567f;
+  --bad-wash: #2a0f18;
+  --gold: #e3c160;
+  --gold-wash: #221c0b;
+  --silver-wash: #222a3d;
+  --bronze-wash: #2a1a10;
+  --bronze: #e09a63;
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.45), 0 8px 20px -12px rgba(0, 0, 0, 0.8);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Sora", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Barlow Condensed", sans-serif;
+  letter-spacing: 0.02em;
+  margin: 0 0 12px;
+}
+
+h1 {
+  font-size: 2.2rem;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 1.4rem;
+}
+
+h3 {
+  font-size: 1.15rem;
+  margin-top: 20px;
+}
+
+p {
+  margin: 0;
+}
+
+/* The .hide class from Lecture 10 */
+.hide {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------
+   Header and tabs
+   --------------------------------------------------------------- */
+.site-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 12px 24px;
+  background: linear-gradient(90deg, var(--header-a), var(--header-b));
+  color: #ffffff;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  background: var(--accent);
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.brand-name {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.brand-sub {
+  color: var(--header-ink);
+  font-size: 0.8rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.tab {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--header-ink);
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: #ffffff;
+}
+
+.tab.active {
+  color: #ffffff;
+  border-bottom-color: var(--accent);
+}
+
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------------
+   Layout
+   --------------------------------------------------------------- */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.page-head h1 {
+  margin: 0;
+}
+
+.columns {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.columns > .panel {
+  flex: 1 1 360px;
+}
+
+.columns > .form-panel {
+  flex: 0 1 360px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+  min-width: 0;
+}
+
+.actions,
+.toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.toolbar {
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+/* ---------------------------------------------------------------
+   Forms and buttons
+   --------------------------------------------------------------- */
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+}
+
+.inline-label {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+input,
+select {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 10px;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+input:focus,
+select:focus,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.field-row {
+  display: flex;
+  gap: 12px;
+}
+
+.field-row label {
+  flex: 1;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.primary,
+.secondary,
+.danger {
+  border-radius: 6px;
+  padding: 9px 16px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.primary {
+  width: 100%;
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.primary:hover {
+  filter: brightness(1.1);
+}
+
+.secondary {
+  background: var(--panel);
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.danger {
+  background: var(--panel);
+  color: var(--bad);
+  border-color: var(--line);
+}
+
+.danger:hover {
+  background: var(--bad-wash);
+}
+
+.icon-button {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink-2);
+  font-size: 0.8rem;
+  padding: 4px 10px;
+}
+
+.icon-button:hover {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink);
+  font-weight: 600;
+  text-align: left;
+}
+
+.link-button:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.segmented {
+  display: inline-flex;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.seg {
+  background: none;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 16px;
+  color: var(--ink-2);
+  font-weight: 600;
+}
+
+.seg.active {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* Player rows inside the result form */
+.player-inputs {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  margin-bottom: 8px;
+}
+
+.player-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.player-name {
+  flex: 1;
+  font-weight: 600;
+  padding-bottom: 22px;
+  overflow-wrap: anywhere;
+}
+
+.player-row label {
+  width: 80px;
+}
+
+.hint,
+.note,
+.muted {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+.hint {
+  margin-bottom: 12px;
+}
+
+/* ---------------------------------------------------------------
+   Messages (loading / empty / error) and form status
+   --------------------------------------------------------------- */
+.message {
+  background: var(--panel-2);
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  padding: 12px 14px;
+  color: var(--ink-2);
+  margin-bottom: 16px;
+}
+
+.message.error {
+  background: var(--bad-wash);
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+.form-status {
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-size: 0.875rem;
+}
+
+.form-status.error {
+  background: var(--bad-wash);
+  color: var(--bad);
+}
+
+.form-status.success {
+  background: var(--ok-wash);
+  color: var(--ok);
+}
+
+/* ---------------------------------------------------------------
+   Tables
+   --------------------------------------------------------------- */
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th {
+  text-align: right;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-2);
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--line);
+  white-space: nowrap;
+}
+
+th.left {
+  text-align: left;
+}
+
+td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+tbody tr:hover {
+  background: var(--panel-2);
+}
+
+tr.selected {
+  background: var(--accent-wash);
+}
+
+.num {
+  text-align: right;
+  font-family: "IBM Plex Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.total {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.name-cell {
+  font-weight: 600;
+}
+
+.rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.rank-1 {
+  background: var(--gold-wash);
+  color: var(--gold);
+}
+
+.rank-2 {
+  background: var(--silver-wash);
+  color: var(--ink);
+}
+
+.rank-3 {
+  background: var(--bronze-wash);
+  color: var(--bronze);
+}
+
+/* ---------------------------------------------------------------
+   Match list (games entered this week)
+   --------------------------------------------------------------- */
+.match-list,
+.roster-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.match-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.tag {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--panel-2);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.match-summary {
+  flex: 1;
+}
+
+.match-points {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ---------------------------------------------------------------
+   Team detail
+   --------------------------------------------------------------- */
+.detail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.detail-head h2 {
+  margin: 0;
+}
+
+.stat-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.stat-card {
+  flex: 1 1 130px;
+  background: var(--panel-2);
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+
+.stat-value {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ---------------------------------------------------------------
+   Rosters
+   --------------------------------------------------------------- */
+.roster-list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.roster-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.roster-name {
+  font-weight: 600;
+}
+
+.roster-record {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.chip {
+  background: var(--accent-wash);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------
+   Scoring rules
+   --------------------------------------------------------------- */
+.rule-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.rule-list dt,
+.rule-list dd {
+  width: 50%;
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.rule-list dd {
+  text-align: right;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+}
+
+.tie-list {
+  padding-left: 20px;
+}
+
+.tie-list li {
+  margin-bottom: 6px;
+}
+
+.tie-list small {
+  color: var(--ink-2);
+  margin-left: 6px;
+}
+
+.points-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.points-grid li {
+  flex: 0 0 76px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--panel-2);
+  border-radius: 6px;
+  padding: 8px 4px;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+}
+
+.points-grid strong {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.points-grid .top-1 {
+  background: var(--gold-wash);
+}
+
+.points-grid .top-2 {
+  background: var(--silver-wash);
+}
+
+.points-grid .top-3 {
+  background: var(--bronze-wash);
+}
+
+/* ---------------------------------------------------------------
+   Small screens
+   --------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .site-header {
+    gap: 10px;
+    padding: 12px 16px;
+  }
+
+  .tabs {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .theme-toggle {
+    margin-left: auto;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .columns > .form-panel {
+    flex-basis: 100%;
+  }
+
+  .match-list li {
+    flex-wrap: wrap;
+  }
+}
